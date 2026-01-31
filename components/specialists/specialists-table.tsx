@@ -2,6 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -12,6 +18,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { StatusBadge } from "./status-badge";
 
@@ -75,69 +83,129 @@ const MOCK_DATA: Service[] = [
 
 export function SpecialistsTable() {
   const [tab, setTab] = useState("all");
+  const router = useRouter();
 
   return (
-    <div className="space-y-4 rounded-lg border bg-white p-4">
+    <div className="space-y-4 rounded-lg bg-white">
       {/* Tabs + Actions */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-end justify-between border-b-2">
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList>
+          <TabsList className="h-auto  bg-transparent p-0" variant="line">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="drafts">Drafts</TabsTrigger>
             <TabsTrigger value="published">Published</TabsTrigger>
           </TabsList>
         </Tabs>
+      </div>
+
+      <div className="flex items-center justify-between pt-4">
+        <Input
+          placeholder="Search Services"
+          className=" bg-[#F1F1F1]
+      h-8 w-[220px]
+      rounded-[3px]
+      border border-border
+      text-sm
+    "
+        />
 
         <div className="flex gap-2">
-          <Button size="sm">Create</Button>
-          <Button size="sm" variant="outline">
+          <Button
+            className="
+        h-8 rounded-[4px]
+        bg-primary px-4 text-sm
+        text-primary-foreground
+        hover:opacity-90
+      "
+          >
+            Create
+          </Button>
+
+          <Button
+            variant="outline"
+            className="
+        h-8 rounded-[4px]
+        px-4 text-sm
+      "
+          >
             Export
           </Button>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="max-w-xs">
-        <Input placeholder="Search Services" />
-      </div>
-
       {/* Table */}
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="border-b">
             <TableHead className="w-8" />
-            <TableHead>Service</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Purchases</TableHead>
-            <TableHead>Duration</TableHead>
-            <TableHead>Approval Status</TableHead>
-            <TableHead>Publish Status</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            {[
+              "Service",
+              "Price",
+              "Purchases",
+              "Approval Status",
+              "Publish Status",
+              "Action",
+            ].map((h) => (
+              <TableHead
+                key={h}
+                className="text-xs font-medium uppercase text-muted-foreground"
+              >
+                {h}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {MOCK_DATA.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <Checkbox />
+            <TableRow key={item.id} className="border-b last:border-b-0">
+              <TableCell className="py-3">
+                <Checkbox className="h-3.5 w-3.5 rounded-[3px]" />
               </TableCell>
-              <TableCell className="font-medium">
-                {item.service}
+
+              <TableCell className="py-3 text-sm font-medium text-brand-text">
+                Incorporation of a new company
               </TableCell>
-              <TableCell>{item.price}</TableCell>
-              <TableCell>{item.purchases}</TableCell>
-              <TableCell>{item.duration}</TableCell>
-              <TableCell>
-                <StatusBadge type={item.approvalStatus} />
+
+              <TableCell className="py-3 text-sm">RM 2,000</TableCell>
+              <TableCell className="py-3 text-sm">20</TableCell>
+
+              <TableCell className="py-3">
+                <StatusBadge type="Approved" />
               </TableCell>
-              <TableCell>
-                <StatusBadge type={item.publishStatus} />
+
+              <TableCell className="py-3">
+                <StatusBadge type="Published" />
               </TableCell>
+
               <TableCell className="text-right">
-                <Button variant="ghost" size="sm">
-                  View
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="rounded-md p-1 hover:bg-gray-100">
+                      <MoreVertical className="h-4 w-4 text-gray-600" />
+                    </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="end" className="w-32">
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`/dashboard/specialists/${item.id}/edit`)
+                      }
+                      className="flex items-center gap-2"
+                    >
+                      <Pencil className="h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() => console.log("Delete", item.id)}
+                      className="flex items-center gap-2 text-red-600 focus:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}
@@ -145,20 +213,18 @@ export function SpecialistsTable() {
       </Table>
 
       {/* Pagination (static) */}
-      <div className="flex items-center justify-center gap-2 pt-4 text-sm">
-        <Button variant="ghost" size="sm">
-          Previous
-        </Button>
-        <Button size="sm">1</Button>
-        <Button variant="ghost" size="sm">
+      <div className="mt-6 flex items-center justify-center gap-2 text-sm">
+        <button className="text-muted-foreground">Previous</button>
+
+        <button className="h-5 w-5 bg-primary text-white rounded-full">
+          1
+        </button>
+
+        <button className="h-5 w-5 rounded-full text-muted-foreground">
           2
-        </Button>
-        <Button variant="ghost" size="sm">
-          3
-        </Button>
-        <Button variant="ghost" size="sm">
-          Next
-        </Button>
+        </button>
+
+        <button className="text-muted-foreground">Next</button>
       </div>
     </div>
   );
