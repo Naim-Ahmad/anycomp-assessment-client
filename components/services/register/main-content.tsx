@@ -1,20 +1,17 @@
 import { CompanySecretary } from "./company-secretary";
-import { FormSection } from "./form-section";
 import { ImageSection } from "./image-section";
+import { TextSection } from "./text-section";
 
 export function MainContent() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <ImageSection />
 
-      <FormSection
-        title="Description"
-        placeholder="Describe your service here"
-      />
+      <TextSection title="Description" text="Describe your service here" />
 
-      <FormSection
+      <TextSection
         title="Additional Offerings"
-        placeholder="Enhance your service by adding additional offerings"
+        text="Enhance your service by adding additional offerings"
       />
 
       <CompanySecretary />
