@@ -1,3 +1,4 @@
+import Providers from "@/store/Providers";
 import { proximaNova, redHatDisplay } from "./fonts";
 import "./globals.css";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
       lang="en"
       className={`${proximaNova.variable} ${redHatDisplay.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
