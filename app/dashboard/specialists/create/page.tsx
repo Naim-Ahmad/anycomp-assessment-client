@@ -54,7 +54,7 @@ export default function RegisterCompanyPage() {
       </div>
 
       {/* Edit Drawer (URL-driven) */}
-      <EditServiceDrawer open={isEdit} onClose={closeEdit} />
+      <EditServiceDrawer open={isEdit} onClose={closeEdit} id={id} />
     </>
   );
 }

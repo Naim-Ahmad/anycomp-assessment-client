@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { specialistsApi } from "./specialistsApi";
+import baseAPI from "./baseAPI";
 
 export const store = configureStore({
   reducer: {
-    [specialistsApi.reducerPath]: specialistsApi.reducer,
+    [baseAPI.reducerPath]: baseAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(specialistsApi.middleware),
+    getDefaultMiddleware().concat(baseAPI.middleware),
   devTools: process.env.NODE_ENV !== "production",
 });
 

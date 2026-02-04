@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { useGetSpecialistsQuery } from "@/store/specialistsApi";
+import { useGetSpecialistsQuery } from "@/store/api/specialistsApi";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -87,7 +87,7 @@ export function SpecialistsTable() {
         />
 
         <div className="flex gap-2">
-          <Link href="/dashboard/specialists/register">
+          <Link href="/dashboard/specialists/create">
             <Button className="h-8 px-4 text-sm">Create</Button>
           </Link>
           <Button variant="outline" className="h-8 px-4 text-sm">
@@ -182,7 +182,9 @@ export function SpecialistsTable() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
                         onClick={() =>
-                          router.push(`/dashboard/specialists/${item.id}/edit`)
+                          router.push(
+                            `/dashboard/specialists/create?edit=true&id=${item.id}`,
+                          )
                         }
                         className="flex gap-2"
                       >
